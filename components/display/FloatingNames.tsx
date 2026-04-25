@@ -46,12 +46,18 @@ type Props = {
 export function FloatingNames({ initialDonors, newDonor, burst }: Props) {
   const [items, setItems] = useState<FloatItem[]>([]);
   const seenIds = useRef<Set<string>>(new Set());
+  const seeded = useRef<boolean>(false);
   const queueOffset = useRef<number>(0);
   const lastQueuedAt = useRef<number>(0);
 
+  // Seed the "seen" set ONCE on mount. Re-running this when
+  // initialDonors changes would mark new realtime donors as seen
+  // before the float effect can pick them up.
   useEffect(() => {
     initialDonors.forEach((d) => seenIds.current.add(d.id));
-  }, [initialDonors]);
+    seeded.current = true;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (!newDonor) return;
@@ -123,11 +129,10 @@ function FloatingName({ item }: { item: FloatItem }) {
       }}
     >
       <div
-        className={`flex items-center gap-2 font-serif italic ${item.fontClass} ${item.colorClass} whitespace-nowrap`}
+        className={`flex items-center gap-2 rounded-full px-5 py-2 backdrop-blur-md bg-stone-900/60 border border-amber-300/30 shadow-[0_8px_24px_-8px_rgba(251,191,36,0.45)] font-serif italic ${item.fontClass} ${item.colorClass} whitespace-nowrap`}
       >
         <Heart className={`${item.heartClass} fill-current`} />
         <span>{item.name}</span>
-        <span aria-hidden>💰</span>
       </div>
     </div>
   );

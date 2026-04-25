@@ -30,6 +30,12 @@ export async function POST(req: NextRequest) {
   if (!name) {
     return NextResponse.json({ error: "Name is required" }, { status: 400 });
   }
+  if (name.length > 200) {
+    return NextResponse.json(
+      { error: "Name must be 200 characters or fewer" },
+      { status: 400 }
+    );
+  }
   const supabase = getServiceClient();
   const { data, error } = await supabase
     .from("donors")

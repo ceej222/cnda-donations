@@ -58,6 +58,7 @@ export function AdminForm({ password, onAdded }: Props) {
         onChange={(e) => setName(e.target.value)}
         placeholder="Name"
         autoFocus
+        maxLength={200}
         className="bg-stone-950 border border-stone-700 rounded-lg px-4 py-3 text-stone-100 font-serif text-lg focus:outline-none focus:border-amber-400"
       />
       {error && (

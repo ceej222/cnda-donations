@@ -1,10 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { supabase, type Donor } from "@/lib/supabase";
 import { QRPanel } from "@/components/display/QRPanel";
 import { ProgressBar } from "@/components/display/ProgressBar";
 import { FloatingNames } from "@/components/display/FloatingNames";
+import { DonorTicker } from "@/components/display/DonorTicker";
 
 export default function DisplayPage() {
   const [donors, setDonors] = useState<Donor[]>([]);
@@ -74,7 +76,7 @@ export default function DisplayPage() {
       <div className="grain" aria-hidden />
 
       {/* Wordmark */}
-      <div className="absolute top-6 left-8 z-20 font-serif text-lg select-none">
+      <div className="absolute top-6 left-8 z-20 font-serif text-xl md:text-2xl select-none">
         <span className="text-stone-100">Support </span>
         <span className="text-amber-400">CNDA</span>
       </div>
@@ -89,42 +91,35 @@ export default function DisplayPage() {
             </div>
             <ProgressBar />
           </div>
-          <div className="absolute bottom-6 left-8 font-serif text-sm text-stone-500 select-none">
-            CNDA
+          <div className="absolute bottom-6 left-8 select-none">
+            <Image
+              src="/cnda-logo.png"
+              alt="CNDA logo"
+              width={90}
+              height={30}
+              className="h-auto w-16 md:w-20 opacity-85"
+              priority
+            />
           </div>
         </section>
 
         {/* RIGHT */}
         <section className="relative border-l border-stone-800/70 flex flex-col">
           <div className="absolute top-0 left-0 right-0 h-32 z-10 bg-gradient-to-b from-stone-950 to-transparent pointer-events-none" />
-          <div className="relative z-20 pt-10 pb-6 text-center flex flex-col gap-2">
-            <div className="font-sans text-xs uppercase tracking-[0.4em] text-amber-400">
+          <div className="relative z-20 pt-10 pb-6 flex flex-col gap-4">
+            <div className="font-sans text-xs uppercase tracking-[0.4em] text-amber-400 text-center">
               Our Donors
             </div>
-            <div className="font-serif italic text-2xl text-stone-100">
-              {donors.length === 0
-                ? " "
-                : `${donors.length} ${
-                    donors.length === 1 ? "person has" : "people have"
-                  } given`}
-            </div>
-          </div>
-          <div className="flex-1 relative">
             {hydrated && donors.length === 0 ? (
-              <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 text-center px-8">
-                <div className="font-sans text-xs uppercase tracking-[0.4em] text-amber-400">
-                  Waiting for the first donor
-                </div>
-                <div className="font-serif italic text-xl text-stone-400">
-                  Scan the code to be the first.
-                </div>
+              <div className="font-serif italic text-xl text-stone-400 text-center px-8 mt-2">
+                Scan the code to be the first.
               </div>
             ) : (
-              <FloatingNames
-                initialDonors={donors}
-                newDonor={latest}
-              />
+              <DonorTicker donors={donors} />
             )}
+          </div>
+          <div className="flex-1 relative">
+            <FloatingNames initialDonors={donors} newDonor={latest} />
           </div>
         </section>
       </div>
