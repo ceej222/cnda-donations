@@ -1,8 +1,7 @@
 export function ProgressBar() {
   return (
     <div
-      className="relative w-full overflow-hidden rounded-2xl border border-stone-800/70 bg-stone-900/60 backdrop-blur-sm"
-      style={{ paddingTop: "120px", height: "120px" }}
+      className="relative h-[120px] w-full overflow-hidden rounded-2xl border border-stone-700/70 bg-white"
     >
       <iframe
         title="Donation form powered by Zeffy"
@@ -15,6 +14,7 @@ export function ProgressBar() {
           right: 0,
           width: "100%",
           height: "120px",
+          backgroundColor: "#ffffff",
         }}
       />
     </div>

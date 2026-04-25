@@ -59,7 +59,7 @@ export function FloatingNames({ initialDonors, newDonor, burst }: Props) {
     seenIds.current.add(newDonor.id);
 
     const now = performance.now();
-    const earliest = Math.max(now, lastQueuedAt.current + 400);
+    const earliest = Math.max(now, lastQueuedAt.current + 250);
     queueOffset.current = earliest - now;
     lastQueuedAt.current = earliest;
 
@@ -81,7 +81,7 @@ export function FloatingNames({ initialDonors, newDonor, burst }: Props) {
     const now = performance.now();
     const newItems: FloatItem[] = fresh.map((d, idx) => {
       seenIds.current.add(d.id);
-      const earliest = Math.max(now, lastQueuedAt.current + 400);
+      const earliest = Math.max(now, lastQueuedAt.current + 250);
       lastQueuedAt.current = earliest;
       const offset = earliest - now + idx * 50;
       return makeItem(d, offset);
