@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { PasswordGate } from "@/components/admin/PasswordGate";
 import { AdminForm } from "@/components/admin/AdminForm";
-import { SettingsPanel } from "@/components/admin/SettingsPanel";
 import { DonorList } from "@/components/admin/DonorList";
 
 export default function AdminPage() {
@@ -34,13 +33,6 @@ function AdminInner({ password }: { password: string }) {
           password={password}
           onAdded={() => setRefreshKey((k) => k + 1)}
         />
-
-        <section className="flex flex-col gap-3">
-          <div className="font-sans text-xs uppercase tracking-[0.4em] text-stone-400">
-            Totals
-          </div>
-          <SettingsPanel password={password} />
-        </section>
 
         <section className="flex flex-col gap-3">
           <DonorList password={password} refreshKey={refreshKey} />
