@@ -1,0 +1,51 @@
+"use client";
+
+import { useState } from "react";
+import { PasswordGate } from "@/components/admin/PasswordGate";
+import { AdminForm } from "@/components/admin/AdminForm";
+import { SettingsPanel } from "@/components/admin/SettingsPanel";
+import { DonorList } from "@/components/admin/DonorList";
+
+export default function AdminPage() {
+  return (
+    <PasswordGate>
+      {(password) => <AdminInner password={password} />}
+    </PasswordGate>
+  );
+}
+
+function AdminInner({ password }: { password: string }) {
+  const [refreshKey, setRefreshKey] = useState<number>(0);
+
+  return (
+    <main className="min-h-screen bg-stone-950 px-4 sm:px-8 py-8">
+      <div className="max-w-2xl mx-auto flex flex-col gap-6">
+        <header className="flex items-baseline justify-between">
+          <div className="font-serif text-2xl">
+            <span className="text-stone-100">Support </span>
+            <span className="text-amber-400">CNDA</span>
+          </div>
+          <div className="font-sans text-xs uppercase tracking-[0.4em] text-amber-400">
+            Admin
+          </div>
+        </header>
+
+        <AdminForm
+          password={password}
+          onAdded={() => setRefreshKey((k) => k + 1)}
+        />
+
+        <section className="flex flex-col gap-3">
+          <div className="font-sans text-xs uppercase tracking-[0.4em] text-stone-400">
+            Totals
+          </div>
+          <SettingsPanel password={password} />
+        </section>
+
+        <section className="flex flex-col gap-3">
+          <DonorList password={password} refreshKey={refreshKey} />
+        </section>
+      </div>
+    </main>
+  );
+}
