@@ -27,9 +27,9 @@ function makeItem(donor: Donor, delayMs: number): FloatItem {
   return {
     key: `${donor.id}-${Math.random().toString(36).slice(2, 8)}`,
     name: donor.name,
-    duration: 22000 + Math.random() * 6000,
+    duration: 10000,
     startX: 25 + Math.random() * 50,
-    drift: (Math.random() < 0.5 ? -1 : 1) * (90 + Math.random() * 60),
+    drift: (Math.random() < 0.5 ? -1 : 1) * (120 + Math.random() * 80),
     fontClass: pick(FONT_CHOICES),
     colorClass: pick(COLOR_CHOICES),
     heartClass: pick(HEART_CHOICES),
@@ -123,10 +123,11 @@ function FloatingName({ item }: { item: FloatItem }) {
       }}
     >
       <div
-        className={`flex items-center gap-3 font-serif italic ${item.fontClass} ${item.colorClass} whitespace-nowrap`}
+        className={`flex items-center gap-2 font-serif italic ${item.fontClass} ${item.colorClass} whitespace-nowrap`}
       >
         <Heart className={`${item.heartClass} fill-current`} />
         <span>{item.name}</span>
+        <span aria-hidden>💰</span>
       </div>
     </div>
   );
