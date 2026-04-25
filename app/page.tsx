@@ -1,20 +1,14 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { supabase, type Donor, type Settings } from "@/lib/supabase";
+import { supabase, type Donor } from "@/lib/supabase";
 import { QRPanel } from "@/components/display/QRPanel";
-import { Counter } from "@/components/display/Counter";
 import { ProgressBar } from "@/components/display/ProgressBar";
 import { FloatingNames } from "@/components/display/FloatingNames";
 
 export default function DisplayPage() {
   const [donors, setDonors] = useState<Donor[]>([]);
   const [latest, setLatest] = useState<Donor | null>(null);
-  const [settings, setSettings] = useState<Settings>({
-    id: 1,
-    total_raised: 0,
-    goal: 100000,
-  });
   const [hydrated, setHydrated] = useState<boolean>(false);
   const initialIdsRef = useRef<Set<string>>(new Set());
 
@@ -22,19 +16,15 @@ export default function DisplayPage() {
     let cancelled = false;
 
     async function bootstrap() {
-      const [{ data: donorRows }, { data: settingsRow }] = await Promise.all([
-        supabase
-          .from("donors")
-          .select("*")
-          .order("created_at", { ascending: false }),
-        supabase.from("settings").select("*").eq("id", 1).single(),
-      ]);
+      const { data: donorRows } = await supabase
+        .from("donors")
+        .select("*")
+        .order("created_at", { ascending: false });
       if (cancelled) return;
       if (donorRows) {
         setDonors(donorRows);
         donorRows.forEach((d) => initialIdsRef.current.add(d.id));
       }
-      if (settingsRow) setSettings(settingsRow);
       setHydrated(true);
     }
     bootstrap();
@@ -64,21 +54,9 @@ export default function DisplayPage() {
       )
       .subscribe();
 
-    const settingsChannel = supabase
-      .channel("settings-feed")
-      .on(
-        "postgres_changes",
-        { event: "UPDATE", schema: "public", table: "settings" },
-        (payload) => {
-          setSettings(payload.new as Settings);
-        }
-      )
-      .subscribe();
-
     return () => {
       cancelled = true;
       supabase.removeChannel(donorChannel);
-      supabase.removeChannel(settingsChannel);
     };
   }, []);
 
@@ -103,16 +81,13 @@ export default function DisplayPage() {
 
       <div className="relative z-10 grid grid-cols-2 h-full w-full">
         {/* LEFT */}
-        <section className="relative flex flex-col justify-center items-start gap-10 px-12 lg:px-16">
+        <section className="relative flex flex-col justify-center items-start gap-10 px-12 lg:px-16 pt-24 pb-16">
           <QRPanel />
           <div className="flex flex-col gap-4 w-full max-w-2xl">
             <div className="font-sans text-xs uppercase tracking-[0.4em] text-amber-400">
               Tonight's Progress
             </div>
-            <Counter value={settings.total_raised} goal={settings.goal} />
-            <div className="mt-2">
-              <ProgressBar />
-            </div>
+            <ProgressBar />
           </div>
           <div className="absolute bottom-6 left-8 font-serif text-sm text-stone-500 select-none">
             CNDA
