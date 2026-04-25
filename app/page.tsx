@@ -76,9 +76,16 @@ export default function DisplayPage() {
       <div className="grain" aria-hidden />
 
       {/* Wordmark */}
-      <div className="absolute top-6 left-8 z-20 font-serif text-xl md:text-2xl select-none">
-        <span className="text-stone-100">Support </span>
-        <span className="text-amber-400">CNDA</span>
+      <div className="absolute top-6 left-8 z-20 flex items-center gap-3 font-serif text-xl md:text-2xl select-none">
+        <span className="text-amber-400">Donate to</span>
+        <Image
+          src="/cnda-logo.png"
+          alt="CNDA"
+          width={120}
+          height={40}
+          priority
+          className="h-7 md:h-9 w-auto"
+        />
       </div>
 
       <div className="relative z-10 grid grid-cols-2 h-full w-full">
@@ -90,16 +97,6 @@ export default function DisplayPage() {
               Tonight's Progress
             </div>
             <ProgressBar />
-          </div>
-          <div className="absolute bottom-6 left-8 select-none">
-            <Image
-              src="/cnda-logo.png"
-              alt="CNDA logo"
-              width={90}
-              height={30}
-              className="h-auto w-16 md:w-20 opacity-85"
-              priority
-            />
           </div>
         </section>
 
