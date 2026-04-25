@@ -9,6 +9,7 @@ type Props = {
 
 export function AdminForm({ password, onAdded }: Props) {
   const [name, setName] = useState<string>("");
+  const [bigDonation, setBigDonation] = useState<boolean>(false);
   const [pending, setPending] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -26,7 +27,7 @@ export function AdminForm({ password, onAdded }: Props) {
           "content-type": "application/json",
           "x-admin-password": password,
         },
-        body: JSON.stringify({ name: trimmed }),
+        body: JSON.stringify({ name: trimmed, big_donation: bigDonation }),
       });
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
@@ -34,6 +35,7 @@ export function AdminForm({ password, onAdded }: Props) {
         return;
       }
       setName("");
+      setBigDonation(false);
       inputRef.current?.focus();
       onAdded();
     } catch {
@@ -61,6 +63,22 @@ export function AdminForm({ password, onAdded }: Props) {
         maxLength={200}
         className="bg-stone-950 border border-stone-700 rounded-lg px-4 py-3 text-stone-100 font-serif text-lg focus:outline-none focus:border-amber-400"
       />
+      <div
+        className={`font-sans text-xs text-right ${
+          name.length >= 200 ? "text-rose-400" : "text-stone-500"
+        }`}
+      >
+        {name.length} / 200
+      </div>
+      <label className="flex items-center gap-3 cursor-pointer select-none font-sans text-sm text-stone-200">
+        <input
+          type="checkbox"
+          checked={bigDonation}
+          onChange={(e) => setBigDonation(e.target.checked)}
+          className="h-4 w-4 accent-amber-400"
+        />
+        Big donation
+      </label>
       {error && (
         <div className="text-rose-400 font-sans text-sm">{error}</div>
       )}

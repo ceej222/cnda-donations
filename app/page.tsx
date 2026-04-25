@@ -104,7 +104,7 @@ export default function DisplayPage() {
         </section>
 
         {/* RIGHT */}
-        <section className="relative border-l border-stone-800/70 flex flex-col">
+        <section className="relative border-l border-stone-800/70 flex flex-col overflow-hidden">
           <div className="absolute top-0 left-0 right-0 h-32 z-10 bg-gradient-to-b from-stone-950 to-transparent pointer-events-none" />
           <div className="relative z-20 pt-10 pb-6 flex flex-col gap-4">
             <div className="font-sans text-xs uppercase tracking-[0.4em] text-amber-400 text-center">
@@ -118,7 +118,9 @@ export default function DisplayPage() {
               <DonorTicker donors={donors} />
             )}
           </div>
-          <div className="flex-1 relative">
+          <div className="flex-1" />
+          {/* Floating names overlay the entire right pane so they rise over the ticker */}
+          <div className="absolute inset-0 z-30 pointer-events-none">
             <FloatingNames initialDonors={donors} newDonor={latest} />
           </div>
         </section>

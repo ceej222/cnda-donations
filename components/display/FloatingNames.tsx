@@ -11,13 +11,12 @@ type FloatItem = {
   drift: number;
   fontClass: string;
   colorClass: string;
-  heartClass: string;
   bornAt: number;
+  bigDonation: boolean;
 };
 
 const FONT_CHOICES = ["text-2xl", "text-3xl", "text-4xl"];
 const COLOR_CHOICES = ["text-amber-200", "text-stone-100", "text-amber-300"];
-const HEART_CHOICES = ["text-rose-400", "text-amber-400", "text-pink-300"];
 
 function pick<T>(arr: T[]): T {
   return arr[Math.floor(Math.random() * arr.length)];
@@ -32,8 +31,8 @@ function makeItem(donor: Donor, delayMs: number): FloatItem {
     drift: (Math.random() < 0.5 ? -1 : 1) * (120 + Math.random() * 80),
     fontClass: pick(FONT_CHOICES),
     colorClass: pick(COLOR_CHOICES),
-    heartClass: pick(HEART_CHOICES),
     bornAt: performance.now() + delayMs,
+    bigDonation: !!donor.big_donation,
   };
 }
 
@@ -129,25 +128,25 @@ function FloatingName({ item }: { item: FloatItem }) {
       }}
     >
       <div
-        className={`flex items-center gap-2 rounded-full px-5 py-2 backdrop-blur-md bg-stone-900/60 border border-amber-300/30 shadow-[0_8px_24px_-8px_rgba(251,191,36,0.45)] font-serif italic ${item.fontClass} ${item.colorClass} whitespace-nowrap`}
+        className={`flex items-center gap-2 rounded-full px-5 py-2 backdrop-blur-md bg-stone-900/60 font-serif italic whitespace-nowrap ${
+          item.fontClass
+        } ${item.colorClass} ${
+          item.bigDonation
+            ? "font-bold border border-amber-300/70 shadow-[0_0_24px_4px_rgba(251,191,36,0.6),0_0_48px_8px_rgba(251,191,36,0.35)]"
+            : "border border-amber-300/30 shadow-[0_8px_24px_-8px_rgba(251,191,36,0.45)]"
+        }`}
       >
-        <Heart className={`${item.heartClass} fill-current`} />
-        <span>{item.name}</span>
+        <span aria-hidden className="not-italic">🤑</span>
+        <span
+          className={
+            item.bigDonation
+              ? "[text-shadow:0_0_12px_rgba(251,191,36,0.85),0_0_24px_rgba(251,191,36,0.45)]"
+              : undefined
+          }
+        >
+          {item.name}
+        </span>
       </div>
     </div>
-  );
-}
-
-function Heart({ className }: { className: string }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      width="1.1em"
-      height="1.1em"
-      className={className}
-      aria-hidden
-    >
-      <path d="M12 21s-7.5-4.6-10-9.5C.5 7.7 3 4 6.5 4c2 0 3.5 1 5.5 3 2-2 3.5-3 5.5-3C21 4 23.5 7.7 22 11.5 19.5 16.4 12 21 12 21z" />
-    </svg>
   );
 }

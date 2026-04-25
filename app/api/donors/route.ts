@@ -27,6 +27,7 @@ export async function POST(req: NextRequest) {
   }
   const body = await req.json().catch(() => null);
   const name = typeof body?.name === "string" ? body.name.trim() : "";
+  const big_donation = body?.big_donation === true;
   if (!name) {
     return NextResponse.json({ error: "Name is required" }, { status: 400 });
   }
@@ -39,7 +40,7 @@ export async function POST(req: NextRequest) {
   const supabase = getServiceClient();
   const { data, error } = await supabase
     .from("donors")
-    .insert({ name })
+    .insert({ name, big_donation })
     .select()
     .single();
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });

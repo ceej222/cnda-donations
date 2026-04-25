@@ -4,6 +4,7 @@ export type Donor = {
   id: string;
   name: string;
   created_at: string;
+  big_donation: boolean;
 };
 
 export type Settings = {
