@@ -94,7 +94,7 @@ export default function DisplayPage() {
           <QRPanel />
           <div className="flex flex-col gap-4 w-full max-w-2xl">
             <div className="font-sans text-xs uppercase tracking-[0.4em] text-amber-400">
-              Tonight's Progress
+              Donation Goal Progress
             </div>
             <ProgressBar />
           </div>
@@ -105,7 +105,7 @@ export default function DisplayPage() {
           <div className="absolute top-0 left-0 right-0 h-32 z-10 bg-gradient-to-b from-stone-950 to-transparent pointer-events-none" />
           <div className="relative z-20 pt-10 pb-6 flex flex-col gap-4">
             <div className="font-sans text-xs uppercase tracking-[0.4em] text-amber-400 text-center">
-              Our Donors
+              Tonight's Donors
             </div>
             {hydrated && donors.length === 0 ? (
               <div className="font-serif italic text-xl text-stone-400 text-center px-8 mt-2">
