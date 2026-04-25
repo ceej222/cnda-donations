@@ -7,7 +7,6 @@ export function ProgressBar() {
       <iframe
         title="Donation form powered by Zeffy"
         src="https://www.zeffy.com/embed/thermometer/cnda-pac-donation"
-        allowTransparency
         style={{
           position: "absolute",
           border: 0,
