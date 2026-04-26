@@ -23,12 +23,18 @@ function pick<T>(arr: T[]): T {
 }
 
 function makeItem(donor: Donor, delayMs: number): FloatItem {
+  // Keep pills well inside the pane: tighter horizontal start range and
+  // bias drift back toward the center so a wide pill never sails off the
+  // right (or left) edge.
+  const startX = 35 + Math.random() * 30; // 35% .. 65%
+  const driftMagnitude = 60 + Math.random() * 60; // 60..120 px
+  const driftDirection = startX < 50 ? 1 : -1; // push toward center
   return {
     key: `${donor.id}-${Math.random().toString(36).slice(2, 8)}`,
     name: donor.name,
     duration: 10000,
-    startX: 25 + Math.random() * 50,
-    drift: (Math.random() < 0.5 ? -1 : 1) * (120 + Math.random() * 80),
+    startX,
+    drift: driftDirection * driftMagnitude,
     fontClass: pick(FONT_CHOICES),
     colorClass: pick(COLOR_CHOICES),
     bornAt: performance.now() + delayMs,
@@ -118,34 +124,45 @@ function FloatingName({ item }: { item: FloatItem }) {
   }, [item.bornAt]);
 
   return (
+    // Outer wrapper handles horizontal anchoring + half-width centering so
+    // wide pills don't clip off the edge. Inner element owns the keyframe
+    // animation transform.
     <div
-      className="absolute bottom-0 will-change-transform"
+      className="absolute bottom-0"
       style={{
         left: `${item.startX}%`,
-        animation: `float-up ${item.duration}ms cubic-bezier(0.45, 0, 0.55, 1) ${delay}ms forwards, float-fade ${item.duration}ms ease-in-out ${delay}ms forwards`,
-        ["--drift" as string]: `${item.drift}px`,
-        opacity: 0,
+        transform: "translateX(-50%)",
+        maxWidth: `min(90%, ${100 - Math.abs(item.startX - 50) * 2}vw)`,
       }}
     >
       <div
-        className={`flex items-center gap-2 rounded-full px-6 py-3 backdrop-blur-md bg-stone-900/60 font-serif italic whitespace-nowrap ${
-          item.fontClass
-        } ${item.colorClass} ${
-          item.bigDonation
-            ? "font-bold border border-amber-300/70 shadow-[0_0_24px_4px_rgba(251,191,36,0.6),0_0_48px_8px_rgba(251,191,36,0.35)]"
-            : "border border-amber-300/30 shadow-[0_8px_24px_-8px_rgba(251,191,36,0.45)]"
-        }`}
+        className="will-change-transform"
+        style={{
+          animation: `float-up ${item.duration}ms cubic-bezier(0.45, 0, 0.55, 1) ${delay}ms forwards, float-fade ${item.duration}ms ease-in-out ${delay}ms forwards`,
+          ["--drift" as string]: `${item.drift}px`,
+          opacity: 0,
+        }}
       >
-        <span aria-hidden className="not-italic">🤑</span>
-        <span
-          className={
+        <div
+          className={`flex items-center gap-2 rounded-full px-6 py-3 backdrop-blur-md bg-stone-900/60 font-serif italic whitespace-nowrap ${
+            item.fontClass
+          } ${item.colorClass} ${
             item.bigDonation
-              ? "[text-shadow:0_0_12px_rgba(251,191,36,0.85),0_0_24px_rgba(251,191,36,0.45)]"
-              : undefined
-          }
+              ? "font-bold border border-amber-300/70 shadow-[0_0_24px_4px_rgba(251,191,36,0.6),0_0_48px_8px_rgba(251,191,36,0.35)]"
+              : "border border-amber-300/30 shadow-[0_8px_24px_-8px_rgba(251,191,36,0.45)]"
+          }`}
         >
-          {item.name}
-        </span>
+          <span aria-hidden className="not-italic">🤑</span>
+          <span
+            className={
+              item.bigDonation
+                ? "[text-shadow:0_0_12px_rgba(251,191,36,0.85),0_0_24px_rgba(251,191,36,0.45)]"
+                : undefined
+            }
+          >
+            {item.name}
+          </span>
+        </div>
       </div>
     </div>
   );
