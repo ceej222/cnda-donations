@@ -98,15 +98,28 @@ export default function DisplayPage() {
             </div>
             <ProgressBar />
           </div>
-          <div className="absolute bottom-8 left-12 lg:left-16 right-12 lg:right-16 select-none flex flex-col gap-2 max-w-2xl">
-            <div className="font-sans text-xs uppercase tracking-[0.4em] text-amber-400">
-              With Gratitude
+          <div className="absolute bottom-8 left-12 lg:left-16 right-12 lg:right-16 select-none max-w-2xl">
+            <div className="relative overflow-hidden rounded-2xl border border-amber-400/30 p-6 shadow-[0_20px_60px_-20px_rgba(251,191,36,0.35)] bg-gradient-to-br from-amber-500/15 via-stone-900/70 to-stone-950/80 backdrop-blur-sm">
+              {/* inner radial glow */}
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-0"
+                style={{
+                  background:
+                    "radial-gradient(ellipse at 0% 0%, rgba(251, 191, 36, 0.18), transparent 60%)",
+                }}
+              />
+              <div className="relative flex flex-col gap-2 mb-4">
+                <div className="font-sans text-xs uppercase tracking-[0.4em] text-amber-400">
+                  With Gratitude
+                </div>
+                <p className="font-serif italic text-lg md:text-xl text-stone-100 leading-snug">
+                  Thank you for championing naturopathic medicine in California.
+                  Your generosity fuels CNDA&rsquo;s advocacy, education, and
+                  the next generation of NDs.
+                </p>
+              </div>
             </div>
-            <p className="font-serif italic text-lg md:text-xl text-stone-200 leading-snug">
-              Thank you for championing naturopathic medicine in California.
-              Your generosity fuels CNDA&rsquo;s advocacy, education, and the
-              next generation of NDs.
-            </p>
           </div>
         </section>
 
