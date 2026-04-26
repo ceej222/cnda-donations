@@ -91,12 +91,14 @@ export default function DisplayPage() {
       <div className="relative z-10 grid grid-cols-2 h-full w-full">
         {/* LEFT */}
         <section className="relative flex flex-col justify-center items-start gap-10 px-12 lg:px-16 pt-24 pb-40">
-          <QRPanel />
           <div className="flex flex-col gap-4 w-full max-w-2xl">
             <div className="font-sans text-xs uppercase tracking-[0.4em] text-amber-400">
               Donation Goal Progress
             </div>
             <ProgressBar />
+          </div>
+          <div className="mb-12">
+            <QRPanel />
           </div>
           <div className="absolute bottom-8 left-12 lg:left-16 right-12 lg:right-16 select-none max-w-2xl">
             <div className="relative overflow-hidden rounded-2xl border border-amber-400/30 p-6 shadow-[0_20px_60px_-20px_rgba(251,191,36,0.35)] bg-gradient-to-br from-amber-500/15 via-stone-900/70 to-stone-950/80 backdrop-blur-sm">
@@ -127,11 +129,11 @@ export default function DisplayPage() {
         <section className="relative border-l border-stone-800/70 flex flex-col overflow-hidden">
           <div className="absolute top-0 left-0 right-0 h-32 z-10 bg-gradient-to-b from-stone-950 to-transparent pointer-events-none" />
           <div className="relative z-20 pt-10 pb-6 flex flex-col gap-4">
-            <div className="font-sans text-xs uppercase tracking-[0.4em] text-amber-400 text-center">
+            <div className="font-sans text-sm md:text-base uppercase tracking-[0.35em] text-amber-400 text-center">
               Tonight's Donors
             </div>
             {hydrated && donors.length === 0 ? (
-              <div className="font-serif italic text-xl text-stone-400 text-center px-8 mt-2">
+              <div className="font-serif italic text-2xl md:text-3xl text-stone-400 text-center px-8 mt-2">
                 Scan the code to be the first.
               </div>
             ) : (

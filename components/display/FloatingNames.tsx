@@ -15,7 +15,7 @@ type FloatItem = {
   bigDonation: boolean;
 };
 
-const FONT_CHOICES = ["text-2xl", "text-3xl", "text-4xl"];
+const FONT_CHOICES = ["text-3xl", "text-4xl", "text-5xl"];
 const COLOR_CHOICES = ["text-amber-200", "text-stone-100", "text-amber-300"];
 
 function pick<T>(arr: T[]): T {
@@ -128,7 +128,7 @@ function FloatingName({ item }: { item: FloatItem }) {
       }}
     >
       <div
-        className={`flex items-center gap-2 rounded-full px-5 py-2 backdrop-blur-md bg-stone-900/60 font-serif italic whitespace-nowrap ${
+        className={`flex items-center gap-2 rounded-full px-6 py-3 backdrop-blur-md bg-stone-900/60 font-serif italic whitespace-nowrap ${
           item.fontClass
         } ${item.colorClass} ${
           item.bigDonation

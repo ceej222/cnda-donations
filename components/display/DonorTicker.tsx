@@ -12,7 +12,7 @@ export function DonorTicker({ donors }: Props) {
   const ordered = [...donors].reverse();
 
   return (
-    <p className="font-serif text-amber-300 text-xl md:text-2xl leading-relaxed text-center px-8">
+    <p className="font-serif text-amber-300 text-2xl md:text-3xl leading-relaxed text-center px-8">
       {ordered.map((donor, idx) => (
         <Fragment key={donor.id}>
           {idx > 0 && (
