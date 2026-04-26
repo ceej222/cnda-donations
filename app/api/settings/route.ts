@@ -26,12 +26,19 @@ export async function PATCH(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   const body = await req.json().catch(() => null);
-  const patch: { total_raised?: number; goal?: number } = {};
+  const patch: {
+    total_raised?: number;
+    goal?: number;
+    celebration_active?: boolean;
+  } = {};
   if (typeof body?.total_raised === "number" && body.total_raised >= 0) {
     patch.total_raised = body.total_raised;
   }
   if (typeof body?.goal === "number" && body.goal > 0) {
     patch.goal = body.goal;
+  }
+  if (typeof body?.celebration_active === "boolean") {
+    patch.celebration_active = body.celebration_active;
   }
   if (Object.keys(patch).length === 0) {
     return NextResponse.json({ error: "No valid fields" }, { status: 400 });

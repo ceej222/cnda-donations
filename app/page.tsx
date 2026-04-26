@@ -2,30 +2,38 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { supabase, type Donor } from "@/lib/supabase";
+import { supabase, type Donor, type Settings } from "@/lib/supabase";
 import { QRPanel } from "@/components/display/QRPanel";
 import { ProgressBar } from "@/components/display/ProgressBar";
 import { FloatingNames } from "@/components/display/FloatingNames";
 import { DonorTicker } from "@/components/display/DonorTicker";
+import { Celebration } from "@/components/display/Celebration";
 
 export default function DisplayPage() {
   const [donors, setDonors] = useState<Donor[]>([]);
   const [latest, setLatest] = useState<Donor | null>(null);
   const [hydrated, setHydrated] = useState<boolean>(false);
+  const [celebrating, setCelebrating] = useState<boolean>(false);
   const initialIdsRef = useRef<Set<string>>(new Set());
 
   useEffect(() => {
     let cancelled = false;
 
     async function bootstrap() {
-      const { data: donorRows } = await supabase
-        .from("donors")
-        .select("*")
-        .order("created_at", { ascending: false });
+      const [{ data: donorRows }, { data: settingsRow }] = await Promise.all([
+        supabase
+          .from("donors")
+          .select("*")
+          .order("created_at", { ascending: false }),
+        supabase.from("settings").select("*").eq("id", 1).single(),
+      ]);
       if (cancelled) return;
       if (donorRows) {
         setDonors(donorRows);
         donorRows.forEach((d) => initialIdsRef.current.add(d.id));
+      }
+      if (settingsRow) {
+        setCelebrating(!!(settingsRow as Settings).celebration_active);
       }
       setHydrated(true);
     }
@@ -56,9 +64,22 @@ export default function DisplayPage() {
       )
       .subscribe();
 
+    const settingsChannel = supabase
+      .channel("settings-feed")
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "settings" },
+        (payload) => {
+          const s = payload.new as Settings;
+          setCelebrating(!!s.celebration_active);
+        }
+      )
+      .subscribe();
+
     return () => {
       cancelled = true;
       supabase.removeChannel(donorChannel);
+      supabase.removeChannel(settingsChannel);
     };
   }, []);
 
@@ -147,6 +168,8 @@ export default function DisplayPage() {
           </div>
         </section>
       </div>
+
+      {celebrating && <Celebration />}
     </main>
   );
 }

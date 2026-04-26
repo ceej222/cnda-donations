@@ -9,8 +9,10 @@ export type Donor = {
 
 export type Settings = {
   id: number;
-  total_raised: number;
-  goal: number;
+  celebration_active: boolean;
+  // Legacy fields — may or may not exist depending on which migrations ran.
+  total_raised?: number;
+  goal?: number;
 };
 
 let _browser: SupabaseClient | null = null;

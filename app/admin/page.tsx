@@ -4,6 +4,7 @@ import { useState } from "react";
 import { PasswordGate } from "@/components/admin/PasswordGate";
 import { AdminForm } from "@/components/admin/AdminForm";
 import { DonorList } from "@/components/admin/DonorList";
+import { CelebrationButton } from "@/components/admin/CelebrationButton";
 
 export default function AdminPage() {
   return (
@@ -33,6 +34,8 @@ function AdminInner({ password }: { password: string }) {
           password={password}
           onAdded={() => setRefreshKey((k) => k + 1)}
         />
+
+        <CelebrationButton password={password} />
 
         <section className="flex flex-col gap-3">
           <DonorList password={password} refreshKey={refreshKey} />
