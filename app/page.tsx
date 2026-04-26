@@ -90,13 +90,23 @@ export default function DisplayPage() {
 
       <div className="relative z-10 grid grid-cols-2 h-full w-full">
         {/* LEFT */}
-        <section className="relative flex flex-col justify-center items-start gap-10 px-12 lg:px-16 pt-24 pb-16">
+        <section className="relative flex flex-col justify-center items-start gap-10 px-12 lg:px-16 pt-24 pb-40">
           <QRPanel />
           <div className="flex flex-col gap-4 w-full max-w-2xl">
             <div className="font-sans text-xs uppercase tracking-[0.4em] text-amber-400">
               Donation Goal Progress
             </div>
             <ProgressBar />
+          </div>
+          <div className="absolute bottom-8 left-12 lg:left-16 right-12 lg:right-16 select-none flex flex-col gap-2 max-w-2xl">
+            <div className="font-sans text-xs uppercase tracking-[0.4em] text-amber-400">
+              With Gratitude
+            </div>
+            <p className="font-serif italic text-lg md:text-xl text-stone-200 leading-snug">
+              Thank you for championing naturopathic medicine in California.
+              Your generosity fuels CNDA&rsquo;s advocacy, education, and the
+              next generation of NDs.
+            </p>
           </div>
         </section>
 
